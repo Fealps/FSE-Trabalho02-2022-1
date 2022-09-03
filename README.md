@@ -21,3 +21,10 @@ $ make all
 $ make run
 ```
 
+## Graficos
+
+Não Foram feitos :sad:
+
+## Dificuldades Encontradas
+
+No geral, tive uma grande dificuldade em fazer o projeto, Pois as matérias todas se acumularam e acabou sendo uma correria para fazer. Apesar disso a experiencia foi divertida, mas infelizmente não foi possivel entregar por completo a air fryer funcionando conforme os requisitos totais do trabalho :sad: 
