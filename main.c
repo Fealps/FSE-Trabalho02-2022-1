@@ -36,6 +36,7 @@ long curve_time[CSV_LINES_MAX];
 long curve_line = CSV_START_LINE;
 long long curve_clock_last = 0;
 
+char alimento[15];
 pthread_t thread_id_log_csv;
 
 
@@ -89,24 +90,34 @@ void temperatura_controle(){
 
     printf("Temperatura de referencia: %2.1lf C'\n", var_temperatura_referencia);
     printf("Temperatura interna:       %2.1lf C'\n", log_data.var_temperatura_interna);
-    printf("Sinal de controle:         %2.1lf%%\n", var_temperatura_controle);
-
+    printf("Potencia do resistor:      %2.1lf%%\n",  log_data.resistor_power);
+    printf("Potencia da ventoinha:     %2.1lf%%\n",  log_data.fan_speed);
 }
 
 void lcd_routine(){
     lcd_clear();
     if(mode == MODE_TERMINAL)
-        lcd_type_line(">>> TERMINAL Tr: ");
-    else
-        if(uart == MODE_TERMINAL)
-            lcd_type_line(">>> UART Tr: ");
-        else
-            lcd_type_line(">>> CURV Tr: ");
+        lcd_type_line(">> MODO TERMINAL ");
+        lcd_set_line(LCD_LINE2);
+        lcd_type_line(">>TI: ");
+        lcd_type_float(log_data.var_temperatura_referencia);
+        lcd_type_line(">>TR: ");
+        lcd_type_float(log_data.var_temperatura_interna);
+    else if(uart == MODE_TERMINAL){
+            lcd_type_line("TI: ");
+            lcd_type_float(log_data.var_temperatura_interna);
+            lcd_type_line(" ");
+            //lcd_type_line(alimento);
+            lcd_set_line(LCD_LINE2);
+            lcd_type_line("TIME: ");
+            //lcd_type_line(temporestante);
+
+        }
     lcd_type_float(log_data.var_temperatura_referencia);
 
     lcd_set_line(LCD_LINE2);
     lcd_type_line("TT:");
-    lcd_type_float(log_data.var_temperatura_externa);
+    lcd_type_float(timeInMicroseconds());
 
 }
 
@@ -269,7 +280,7 @@ int main(void){
     csv_create_log();
     
     modbus_open();
-    if(mode != MODE_TERMINAL){
+    if(mode == MODE_TERMINAL){
         modo_controle(ESP_MODO_DASHBOARD);
     }else{
         modo_controle(ESP_MODO_TERMINAL);
